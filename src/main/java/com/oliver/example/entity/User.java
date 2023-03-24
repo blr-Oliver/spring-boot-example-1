@@ -1,6 +1,8 @@
 package com.oliver.example.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -43,7 +45,9 @@ public class User {
   public Instant getRegisteredAt() {
     return registeredAt;
   }
-  public void setRegisteredAt(Instant registeredAt) {
-    this.registeredAt = registeredAt;
+
+  @JsonProperty("registeredAt")
+  public long getRegisteredTimestamp() {
+    return getRegisteredAt().toEpochMilli();
   }
 }

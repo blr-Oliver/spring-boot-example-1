@@ -1,5 +1,7 @@
 package com.oliver.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 
@@ -15,6 +17,7 @@ public class Track {
   private String name;
 
   @Column(nullable = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
   private LocalTime duration;
 
   @Column(nullable = true)

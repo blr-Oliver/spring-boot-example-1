@@ -1,5 +1,7 @@
 package com.oliver.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -15,6 +17,7 @@ public class Album {
   private String name;
 
   @Column(nullable = true)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate published;
 
   public Integer getId() {
