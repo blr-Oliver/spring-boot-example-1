@@ -1,12 +1,15 @@
 package com.oliver.example.web;
 
+import com.oliver.example.entity.Album;
 import com.oliver.example.entity.Track;
+import com.oliver.example.repository.AlbumRepository;
 import com.oliver.example.repository.TrackRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -18,6 +21,8 @@ import java.util.List;
 public class TrackController {
   @Autowired
   private TrackRepository repository;
+  @Autowired
+  private AlbumRepository albumRepository;
 
   @RequestMapping(method = RequestMethod.GET)
   public List<Track> listAll() {
@@ -44,5 +49,10 @@ public class TrackController {
   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public void delete(@PathVariable(name = "id", required = true) Integer id) {
     repository.deleteById(id);
+  }
+
+  @RequestMapping(path = "/{id}/albums", method = RequestMethod.GET)
+  public Collection<Album> getAlbums(@PathVariable Integer id) {
+    return albumRepository.findAllByTrackId(id);
   }
 }

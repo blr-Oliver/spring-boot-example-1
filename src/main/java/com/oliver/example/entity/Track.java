@@ -1,9 +1,11 @@
 package com.oliver.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "track")
@@ -22,6 +24,10 @@ public class Track {
 
   @Column(nullable = true)
   private String genre;
+
+  @ManyToMany(mappedBy = "tracks")
+  @JsonIgnore
+  private Collection<Album> albums;
 
   public Integer getId() {
     return id;
@@ -46,5 +52,9 @@ public class Track {
   }
   public void setGenre(String genre) {
     this.genre = genre;
+  }
+
+  public Collection<Album> getAlbums() {
+    return albums;
   }
 }

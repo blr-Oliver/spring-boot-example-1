@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "album")
@@ -19,6 +20,16 @@ public class Album {
   @Column(nullable = true)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate published;
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {
+      CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH
+  })
+  @JoinTable(name = "album_track",
+      joinColumns = @JoinColumn(name = "album_id"),
+      inverseJoinColumns = @JoinColumn(name = "track_id")
+  )
+  @OrderColumn(name = "idx")
+  private List<Track> tracks;
 
   public Integer getId() {
     return id;
@@ -37,5 +48,12 @@ public class Album {
   }
   public void setPublished(LocalDate published) {
     this.published = published;
+  }
+
+  public List<Track> getTracks() {
+    return tracks;
+  }
+  public void setTracks(List<Track> tracks) {
+    this.tracks = tracks;
   }
 }

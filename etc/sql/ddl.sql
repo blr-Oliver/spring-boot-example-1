@@ -24,14 +24,18 @@ CREATE TABLE user (
     registered_at DATETIME NOT NULL DEFAULT NOW()
 );
 
-create table album_track (
+CREATE TABLE album_track (
     album_id INT NOT NULL,
     track_id INT NOT NULL,
     idx INT NOT NULL,
-    primary key (album_id, track_id),
-    unique key (album_id, idx),
-    FOREIGN KEY (album_id) references album(id) ON DELETE RESTRICT,
-    FOREIGN KEY (track_id) references track(id) ON DELETE CASCADE
+    PRIMARY KEY (album_id, track_id),
+    UNIQUE KEY (album_id, idx),
+    FOREIGN KEY (album_id)
+        REFERENCES album (id)
+        ON DELETE RESTRICT,
+    FOREIGN KEY (track_id)
+        REFERENCES track (id)
+        ON DELETE CASCADE
 );
 
 create table track_author (
