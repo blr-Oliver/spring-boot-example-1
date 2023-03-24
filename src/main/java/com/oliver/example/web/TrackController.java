@@ -1,16 +1,21 @@
 package com.oliver.example.web;
 
 import com.oliver.example.entity.Album;
+import com.oliver.example.entity.Artist;
 import com.oliver.example.entity.Track;
-import com.oliver.example.repository.AlbumRepository;
+import com.oliver.example.repository.ArtistRepository;
 import com.oliver.example.repository.TrackRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(
@@ -22,7 +27,7 @@ public class TrackController {
   @Autowired
   private TrackRepository repository;
   @Autowired
-  private AlbumRepository albumRepository;
+  private ArtistRepository artistRepository;
 
   @RequestMapping(method = RequestMethod.GET)
   public List<Track> listAll() {
@@ -32,6 +37,7 @@ public class TrackController {
   @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Track create(@RequestBody Track newEntity) {
     newEntity.setId(null);
+    // TODO manage authors
     return repository.save(newEntity);
   }
 
@@ -41,8 +47,14 @@ public class TrackController {
   }
 
   @RequestMapping(path = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @Transactional(Transactional.TxType.REQUIRED)
   public Track update(@PathVariable(name = "id", required = true) Integer id, @RequestBody Track entity) {
     entity.setId(id);
+    List<Integer> trackIds = entity.getAuthors()
+        .stream()
+        .map(Artist::getId)
+        .collect(Collectors.toList());
+    entity.setAuthors(new HashSet<>(artistRepository.findAllById(trackIds)));
     return repository.save(entity);
   }
 
@@ -53,6 +65,9 @@ public class TrackController {
 
   @RequestMapping(path = "/{id}/albums", method = RequestMethod.GET)
   public Collection<Album> getAlbums(@PathVariable Integer id) {
-    return albumRepository.findAllByTrackId(id);
+    return repository
+        .findById(id)
+        .map(Track::getAlbums)
+        .orElse(Collections.emptyList());
   }
 }

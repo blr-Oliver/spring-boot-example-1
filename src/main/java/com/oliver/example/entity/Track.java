@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "track")
@@ -24,6 +25,15 @@ public class Track {
 
   @Column(nullable = true)
   private String genre;
+
+  @ManyToMany(cascade = {
+      CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH
+  })
+  @JoinTable(name = "track_author",
+      joinColumns = @JoinColumn(name = "track_id"),
+      inverseJoinColumns = @JoinColumn(name = "author_id")
+  )
+  private Set<Artist> authors;
 
   @ManyToMany(mappedBy = "tracks")
   @JsonIgnore
@@ -53,7 +63,12 @@ public class Track {
   public void setGenre(String genre) {
     this.genre = genre;
   }
-
+  public Set<Artist> getAuthors() {
+    return authors;
+  }
+  public void setAuthors(Set<Artist> authors) {
+    this.authors = authors;
+  }
   public Collection<Album> getAlbums() {
     return albums;
   }

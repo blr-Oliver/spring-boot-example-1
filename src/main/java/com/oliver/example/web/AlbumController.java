@@ -33,6 +33,7 @@ public class AlbumController {
   @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Album create(@RequestBody Album newEntity) {
     newEntity.setId(null);
+    // TODO manage tracks
     return repository.save(newEntity);
   }
 

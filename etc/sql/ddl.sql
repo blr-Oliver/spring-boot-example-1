@@ -38,12 +38,16 @@ CREATE TABLE album_track (
         ON DELETE CASCADE
 );
 
-create table track_author (
+CREATE TABLE track_author (
     track_id INT NOT NULL,
     author_id INT NOT NULL,
-    primary key (album_id, track_id),
-    FOREIGN KEY (track_id) references track(id) ON DELETE CASCADE,
-    FOREIGN KEY (author_id) references track(id) ON DELETE RESTRICT
+    PRIMARY KEY (track_id, author_id),
+    FOREIGN KEY (track_id)
+        REFERENCES track (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (author_id)
+        REFERENCES author (id)
+        ON DELETE RESTRICT
 );
 
 create table user_role (
