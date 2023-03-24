@@ -2,6 +2,7 @@ package com.oliver.example.web;
 
 import com.oliver.example.entity.Track;
 import com.oliver.example.repository.TrackRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +12,19 @@ import java.util.List;
 @RestController
 @RequestMapping(
     path = "/api/tracks",
-    method = {RequestMethod.HEAD, RequestMethod.OPTIONS},
     produces = MediaType.APPLICATION_JSON_VALUE
 )
+@Tag(name = "Tracks")
 public class TrackController {
   @Autowired
   private TrackRepository repository;
 
-  @RequestMapping(path = {"", "/"}, method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   public List<Track> listAll() {
     return repository.findAll();
   }
 
-  @RequestMapping(path = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Track create(@RequestBody Track newEntity) {
     newEntity.setId(null);
     return repository.save(newEntity);

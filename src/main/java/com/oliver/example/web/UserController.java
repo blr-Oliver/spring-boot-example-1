@@ -2,6 +2,7 @@ package com.oliver.example.web;
 
 import com.oliver.example.entity.User;
 import com.oliver.example.repository.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +12,19 @@ import java.util.List;
 @RestController
 @RequestMapping(
     path = "/api/users",
-    method = {RequestMethod.HEAD, RequestMethod.OPTIONS},
     produces = MediaType.APPLICATION_JSON_VALUE
 )
+@Tag(name = "Users")
 public class UserController {
   @Autowired
   private UserRepository repository;
 
-  @RequestMapping(path = {"", "/"}, method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   public List<User> listAll() {
     return repository.findAll();
   }
 
-  @RequestMapping(path = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public User create(@RequestBody User newEntity) {
     newEntity.setLogin(null);
     return repository.save(newEntity);

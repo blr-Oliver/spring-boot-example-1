@@ -2,6 +2,7 @@ package com.oliver.example.web;
 
 import com.oliver.example.entity.Author;
 import com.oliver.example.repository.AuthorRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +12,19 @@ import java.util.List;
 @RestController
 @RequestMapping(
     path = "/api/authors",
-    method = {RequestMethod.HEAD, RequestMethod.OPTIONS},
     produces = MediaType.APPLICATION_JSON_VALUE
 )
+@Tag(name = "Authors")
 public class AuthorController {
   @Autowired
   private AuthorRepository repository;
 
-  @RequestMapping(path = {"", "/"}, method = RequestMethod.GET)
+  @RequestMapping(method = RequestMethod.GET)
   public List<Author> listAll() {
     return repository.findAll();
   }
 
-  @RequestMapping(path = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public Author create(@RequestBody Author newEntity) {
     newEntity.setId(null);
     return repository.save(newEntity);
