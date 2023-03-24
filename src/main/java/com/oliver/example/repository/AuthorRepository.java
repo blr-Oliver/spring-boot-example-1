@@ -1,9 +1,9 @@
 package com.oliver.example.repository;
 
-import com.oliver.example.entity.Track;
+import com.oliver.example.entity.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TrackRepository extends JpaRepository<Track, Integer> {
+public interface AuthorRepository extends JpaRepository<Author, Integer> {
 }

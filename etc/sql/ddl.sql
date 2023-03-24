@@ -5,16 +5,23 @@ CREATE TABLE track (
     genre VARCHAR(100)
 );
 
-create table author (
+CREATE TABLE author (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(500) NOT NULL,
     short_name VARCHAR(100)
 );
 
-create table album (
+CREATE TABLE album (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(500) NOT NULL,
     published DATE
+);
+
+CREATE TABLE user (
+    login VARCHAR(100) NOT NULL PRIMARY KEY,
+    email VARCHAR(500) NOT NULL UNIQUE,
+    public_name VARCHAR(500) NOT NULL UNIQUE,
+    registered_at DATETIME NOT NULL DEFAULT NOW()
 );
 
 create table album_track (
@@ -33,13 +40,6 @@ create table track_author (
     primary key (album_id, track_id),
     FOREIGN KEY (track_id) references track(id) ON DELETE CASCADE,
     FOREIGN KEY (author_id) references track(id) ON DELETE RESTRICT
-);
-
-create table user (
-    login varchar(100) NOT NULL PRIMARY key
-    email varchar(500) NOT NULL unique,
-    public_name varchar(500) NOT NULL UNIQUE,
-    registered_at DATETIME NOT NULL DEFAULT NOW()
 );
 
 create table user_role (
