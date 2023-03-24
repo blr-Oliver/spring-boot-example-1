@@ -29,6 +29,20 @@ public class User {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private Set<String> roles;
 
+  @ManyToMany(cascade = {
+      CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH
+  })
+  @JoinTable(name = "user_favorite_track",
+      joinColumns = @JoinColumn(name = "user_login"),
+      inverseJoinColumns = @JoinColumn(name = "track_id")
+  )
+  private Set<Track> favoriteTracks;
+
+  @ElementCollection
+  @CollectionTable(name = "user_favorite_album", joinColumns = @JoinColumn(name = "user_login"))
+  @Column(name = "album_id")
+  private Set<Integer> favoriteAlbums;
+
   public String getLogin() {
     return login;
   }
@@ -62,5 +76,17 @@ public class User {
   }
   public void setRoles(Set<String> roles) {
     this.roles = roles;
+  }
+  public Set<Track> getFavoriteTracks() {
+    return favoriteTracks;
+  }
+  public void setFavoriteTracks(Set<Track> favoriteTracks) {
+    this.favoriteTracks = favoriteTracks;
+  }
+  public Set<Integer> getFavoriteAlbums() {
+    return favoriteAlbums;
+  }
+  public void setFavoriteAlbums(Set<Integer> favoriteAlbums) {
+    this.favoriteAlbums = favoriteAlbums;
   }
 }

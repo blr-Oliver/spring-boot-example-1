@@ -59,18 +59,26 @@ CREATE TABLE user_role (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create table user_favorite_album (
-    user_login varchar(100) not null,
+CREATE TABLE user_favorite_album (
+    user_login VARCHAR(100) NOT NULL,
     album_id INT NOT NULL,
-    primary key (user_login, album_id),
-    foreign key (user_login) references user(login) on delete cascade on update cascade,
-    foreign key (album_id) references album(id) on delete cascade on update cascade
+    PRIMARY KEY (user_login, album_id),
+    FOREIGN KEY (user_login)
+        REFERENCES user (login)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (album_id)
+        REFERENCES album (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create table user_favorite_track (
-    user_login varchar(100) not null,
+CREATE TABLE user_favorite_track (
+    user_login VARCHAR(100) NOT NULL,
     track_id INT NOT NULL,
-    primary key (user_login, track_id),
-    foreign key (user_login) references user(login) on delete cascade on update cascade,
-    foreign key (track_id) references track(id) on delete cascade on update cascade
+    PRIMARY KEY (user_login, track_id),
+    FOREIGN KEY (user_login)
+        REFERENCES user (login)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (track_id)
+        REFERENCES track (id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
