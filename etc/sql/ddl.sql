@@ -50,11 +50,13 @@ CREATE TABLE track_author (
         ON DELETE RESTRICT
 );
 
-create table user_role (
-    user_login varchar(100) not null,
-    role varchar(100) NOT NULL,
-    primary key (user_login, role),
-    foreign key (user_login) references user(login) on delete cascade on update cascade
+CREATE TABLE user_role (
+    user_login VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    PRIMARY KEY (user_login, role),
+    FOREIGN KEY (user_login)
+        REFERENCES user (login)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 create table user_favorite_album (

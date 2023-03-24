@@ -1,13 +1,12 @@
 package com.oliver.example.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -21,8 +20,14 @@ public class User {
   @Column(name = "public_name", unique = true, nullable = false)
   private String publicName;
 
-  @Column(name = "registered_at", nullable = false)
+  @Column(name = "registered_at", nullable = false, updatable = false, insertable = false)
   private Instant registeredAt;
+
+  @ElementCollection
+  @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_login"))
+  @Column(name = "role")
+  @JsonInclude(JsonInclude.Include.NON_EMPTY)
+  private Set<String> roles;
 
   public String getLogin() {
     return login;
@@ -46,8 +51,16 @@ public class User {
     return registeredAt;
   }
 
-  @JsonProperty("registeredAt")
-  public long getRegisteredTimestamp() {
+  @JsonProperty(value = "registeredAt", required = false)
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  public Long getRegisteredTimestamp() {
+    if (this.registeredAt == null) return null;
     return getRegisteredAt().toEpochMilli();
+  }
+  public Set<String> getRoles() {
+    return roles;
+  }
+  public void setRoles(Set<String> roles) {
+    this.roles = roles;
   }
 }

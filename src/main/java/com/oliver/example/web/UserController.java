@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,6 @@ import java.util.List;
 public class UserController {
   @Autowired
   private UserRepository repository;
-
   @RequestMapping(method = RequestMethod.GET)
   public List<User> listAll() {
     return repository.findAll();
