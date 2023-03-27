@@ -29,14 +29,15 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        .rememberMe().disable()
+        .csrf().disable()
+        .cors().disable()
         .authorizeRequests(this::configureAuthorization)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
         .formLogin(this::configureFormLogin)
         .logout(this::configureLogout)
-        .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint()).and()
-        .httpBasic().disable()
-        .csrf().disable()
-        .cors().disable()
+        .httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint()).and()
+        .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint())
     ;
     return http.build();
   }
