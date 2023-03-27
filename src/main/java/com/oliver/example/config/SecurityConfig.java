@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,8 @@ import org.springframework.security.web.authentication.AuthenticationEntryPointF
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,7 @@ public class SecurityConfig {
         .authorizeRequests(this::configureAuthorization)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
         .formLogin(this::configureFormLogin)
+        .logout(this::configureLogout)
         .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint()).and()
         .httpBasic().disable()
         .csrf().disable()
@@ -51,6 +55,16 @@ public class SecurityConfig {
         .loginPage("/login")
         .successHandler(noopAuthenticationSuccessHandler())
         .failureHandler(entryPointAuthenticationFailureHandler());
+  }
+
+  private void configureLogout(LogoutConfigurer<HttpSecurity> config) {
+    config
+        .logoutUrl(null)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST", false))
+        .invalidateHttpSession(true)
+        .clearAuthentication(true)
+        .deleteCookies("JSESSIONID")
+        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT));
   }
 
   @Bean
