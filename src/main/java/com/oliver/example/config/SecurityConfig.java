@@ -6,6 +6,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,28 +26,31 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .authorizeRequests()
-          .antMatchers("/swagger-ui/**", "/*/api-docs/**").permitAll()
-          .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-          .antMatchers("/api/users/**").hasRole("ADMIN")
-          .antMatchers("/api/**").authenticated()
-          .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
-          .anyRequest().authenticated()
-          .and()
+        .authorizeRequests(this::configureAuthorization)
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
-        .formLogin()
-          .loginPage("/login")
-          .successHandler(noopAuthenticationSuccessHandler())
-          .failureHandler(entryPointAuthenticationFailureHandler())
-          .and()
-        .exceptionHandling()
-          .authenticationEntryPoint(restAuthenticationEntryPoint())
-          .and()
+        .formLogin(this::configureFormLogin)
+        .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint()).and()
         .httpBasic().disable()
         .csrf().disable()
         .cors().disable()
     ;
     return http.build();
+  }
+  private void configureAuthorization(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config) {
+    config
+        .antMatchers("/swagger-ui/**", "/*/api-docs/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+        .antMatchers("/api/users/**").hasRole("ADMIN")
+        .antMatchers("/api/**").authenticated()
+        .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
+        .anyRequest().authenticated();
+  }
+
+  private void configureFormLogin(FormLoginConfigurer<HttpSecurity> config) {
+    config
+        .loginPage("/login")
+        .successHandler(noopAuthenticationSuccessHandler())
+        .failureHandler(entryPointAuthenticationFailureHandler());
   }
 
   @Bean
