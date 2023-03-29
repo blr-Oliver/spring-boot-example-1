@@ -1,11 +1,9 @@
 package com.oliver.example.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -15,10 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -55,7 +53,7 @@ public class SecurityConfig {
     config
         .loginPage("/login")
         .successHandler(noopAuthenticationSuccessHandler())
-        .failureHandler(entryPointAuthenticationFailureHandler());
+        .failureHandler(simpleAuthenticationFailureHandler());
   }
 
   private void configureLogout(LogoutConfigurer<HttpSecurity> config) {
@@ -80,8 +78,8 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationFailureHandler entryPointAuthenticationFailureHandler() {
-    return new AuthenticationEntryPointFailureHandler(restAuthenticationEntryPoint());
+  public AuthenticationFailureHandler simpleAuthenticationFailureHandler() {
+    return new SimpleUrlAuthenticationFailureHandler();
   }
 
   @Bean
