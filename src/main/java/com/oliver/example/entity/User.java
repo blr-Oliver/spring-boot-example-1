@@ -1,6 +1,5 @@
 package com.oliver.example.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
