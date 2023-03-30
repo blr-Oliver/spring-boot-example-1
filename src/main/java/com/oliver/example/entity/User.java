@@ -1,16 +1,23 @@
 package com.oliver.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class User {
   @Id
+  @Column(name = "account_id", nullable = false)
+  private Integer accountId;
+
+  @OneToOne(fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
+  @JoinColumn(name = "account_id", referencedColumnName = "id", insertable = false, updatable = false)
+  private Account account;
+
+  @Column
   private String login;
 
   @Column(unique = true, nullable = false)
@@ -18,9 +25,6 @@ public class User {
 
   @Column(name = "public_name", unique = true, nullable = false)
   private String publicName;
-
-  @Column(name = "registered_at", nullable = false, updatable = false, insertable = false)
-  private Instant registeredAt;
 
   @ElementCollection
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_login"))
@@ -42,6 +46,19 @@ public class User {
   @Column(name = "album_id")
   private Set<Integer> favoriteAlbums;
 
+  public Integer getAccountId() {
+    return accountId;
+  }
+  public void setAccountId(Integer accountId) {
+    this.accountId = accountId;
+  }
+  @JsonIgnore
+  public Account getAccount() {
+    return account;
+  }
+  public void setAccount(Account account) {
+    this.account = account;
+  }
   public String getLogin() {
     return login;
   }
@@ -59,16 +76,6 @@ public class User {
   }
   public void setPublicName(String publicName) {
     this.publicName = publicName;
-  }
-  public Instant getRegisteredAt() {
-    return registeredAt;
-  }
-
-  @JsonProperty(value = "registeredAt", required = false)
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  public Long getRegisteredTimestamp() {
-    if (this.registeredAt == null) return null;
-    return getRegisteredAt().toEpochMilli();
   }
   public Set<String> getRoles() {
     return roles;

@@ -15,4 +15,4 @@ UPDATE user_role r INNER JOIN user u ON r.user_login = u.login SET r.account_id 
 UPDATE user_favorite_album f INNER JOIN user u ON f.user_login = u.login SET f.account_id = u.account_id;
 UPDATE user_favorite_track f INNER JOIN user u ON f.user_login = u.login SET f.account_id = u.account_id;
 
-INSERT INTO account(id, password_hash, registered_at) SELECT account_id, concat('{md5}', md5(login)), registered_at FROM USER;
+INSERT INTO account(id, password_hash, registered_at) SELECT account_id, concat('{MD5}', md5(login)), registered_at FROM USER;

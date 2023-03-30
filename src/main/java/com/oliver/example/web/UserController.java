@@ -41,14 +41,14 @@ public class UserController {
     return repository.save(newEntity);
   }
 
-  @RequestMapping(path = "/{login}", method = RequestMethod.GET)
-  public User read(@PathVariable(name = "login", required = true) String login) {
-    return repository.findById(login).orElse(null);
+  @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+  public User read(@PathVariable(name = "id", required = true) Integer id) {
+    return repository.findById(id).orElse(null);
   }
 
-  @RequestMapping(path = "/{login}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public User update(@PathVariable(name = "login", required = true) String login, @RequestBody User entity) {
-    entity.setLogin(login);
+  @RequestMapping(path = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public User update(@PathVariable(name = "id", required = true) Integer id, @RequestBody User entity) {
+    entity.setAccountId(id);
     Set<Integer> trackIds = entity.getFavoriteTracks()
         .stream()
         .map(Track::getId)
@@ -58,8 +58,8 @@ public class UserController {
     return repository.save(entity);
   }
 
-  @RequestMapping(path = "/{login}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public void delete(@PathVariable(name = "login", required = true) String login) {
-    repository.deleteById(login);
+  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public void delete(@PathVariable(name = "id", required = true) Integer id) {
+    repository.deleteById(id);
   }
 }
