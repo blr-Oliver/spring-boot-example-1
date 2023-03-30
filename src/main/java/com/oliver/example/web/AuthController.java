@@ -1,21 +1,18 @@
 package com.oliver.example.web;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.oliver.example.web.dto.LoginDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "Auth")
 public class AuthController {
-
-  @RequestMapping(path = "/login", method = RequestMethod.POST)
-  public void login(@RequestParam(name = "username") String username,
-                    @RequestParam(name = "password") @Parameter(schema = @Schema(format = "password")) String password) {
+  @RequestMapping(path = "/login", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+  public void login(@RequestBody LoginDto login) {
     // this will never be called
   }
 
@@ -25,6 +22,6 @@ public class AuthController {
   }
 
   @RequestMapping(path = "/register", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_VALUE})
-  public void register() {
+  public void register(@RequestBody LoginDto registration) {
   }
 }
