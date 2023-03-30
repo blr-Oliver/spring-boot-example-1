@@ -19,6 +19,7 @@ public class Account {
   private Integer id;
 
   @Column(name = "password_hash", nullable = false)
+  @JsonIgnore
   private String password;
 
   @Column
@@ -34,8 +35,9 @@ public class Account {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private Set<String> roles;
 
-  @OneToOne(fetch = FetchType.EAGER, optional = true, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, optional = true, orphanRemoval = false, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
   @JoinColumn(name = "id", referencedColumnName = "account_id")
+  @JsonIgnore
   private User user;
 
   public Integer getId() {
@@ -73,12 +75,16 @@ public class Account {
     this.roles = roles;
   }
 
-  @JsonInclude(JsonInclude.Include.ALWAYS)
   public User getUser() {
     return user;
   }
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  @JsonProperty(required = false)
+  public boolean hasUser() {
+    return this.user != null;
   }
 }
