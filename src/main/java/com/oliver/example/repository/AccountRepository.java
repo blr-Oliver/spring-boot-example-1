@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-  @Query("select a from Account a JOIN FETCH a.user JOIN FETCH a.roles where a.user.email = ?1")
+  @Query("select a from Account a JOIN FETCH a.roles where a.email = ?1")
   Optional<Account> findByEmail(String email);
 }

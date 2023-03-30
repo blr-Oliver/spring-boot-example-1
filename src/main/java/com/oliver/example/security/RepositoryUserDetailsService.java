@@ -18,7 +18,7 @@ public class RepositoryUserDetailsService implements UserDetailsService {
     return accountRepository
         .findByEmail(username)
         .map(account -> User.builder()
-            .username(account.getUser().getEmail())
+            .username(account.getEmail())
             .password(account.getPassword())
             .roles(account.getRoles().toArray(new String[0]))
             .build())

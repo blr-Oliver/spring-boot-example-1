@@ -16,9 +16,6 @@ public class User {
   @JoinColumn(name = "account_id", referencedColumnName = "id", insertable = false, updatable = false)
   private Account account;
 
-  @Column(unique = true, nullable = false)
-  private String email;
-
   @Column(name = "public_name", unique = true, nullable = false)
   private String publicName;
 
@@ -48,12 +45,6 @@ public class User {
   }
   public void setAccount(Account account) {
     this.account = account;
-  }
-  public String getEmail() {
-    return email;
-  }
-  public void setEmail(String email) {
-    this.email = email;
   }
   public String getPublicName() {
     return publicName;
