@@ -1,7 +1,6 @@
 package com.oliver.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -17,32 +16,23 @@ public class User {
   @JoinColumn(name = "account_id", referencedColumnName = "id", insertable = false, updatable = false)
   private Account account;
 
-  @Column
-  private String login;
-
   @Column(unique = true, nullable = false)
   private String email;
 
   @Column(name = "public_name", unique = true, nullable = false)
   private String publicName;
 
-  @ElementCollection
-  @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_login"))
-  @Column(name = "role")
-  @JsonInclude(JsonInclude.Include.NON_EMPTY)
-  private Set<String> roles;
-
   @ManyToMany(cascade = {
       CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH
   })
   @JoinTable(name = "user_favorite_track",
-      joinColumns = @JoinColumn(name = "user_login"),
+      joinColumns = @JoinColumn(name = "account_id"),
       inverseJoinColumns = @JoinColumn(name = "track_id")
   )
   private Set<Track> favoriteTracks;
 
   @ElementCollection
-  @CollectionTable(name = "user_favorite_album", joinColumns = @JoinColumn(name = "user_login"))
+  @CollectionTable(name = "user_favorite_album", joinColumns = @JoinColumn(name = "account_id"))
   @Column(name = "album_id")
   private Set<Integer> favoriteAlbums;
 
@@ -59,12 +49,6 @@ public class User {
   public void setAccount(Account account) {
     this.account = account;
   }
-  public String getLogin() {
-    return login;
-  }
-  public void setLogin(String login) {
-    this.login = login;
-  }
   public String getEmail() {
     return email;
   }
@@ -76,12 +60,6 @@ public class User {
   }
   public void setPublicName(String publicName) {
     this.publicName = publicName;
-  }
-  public Set<String> getRoles() {
-    return roles;
-  }
-  public void setRoles(Set<String> roles) {
-    this.roles = roles;
   }
   public Set<Track> getFavoriteTracks() {
     return favoriteTracks;

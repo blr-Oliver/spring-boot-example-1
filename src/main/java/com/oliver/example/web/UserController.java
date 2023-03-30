@@ -34,13 +34,6 @@ public class UserController {
     return repository.findAll();
   }
 
-  @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public User create(@RequestBody User newEntity) {
-    newEntity.setLogin(null);
-    // TODO manage relations
-    return repository.save(newEntity);
-  }
-
   @RequestMapping(path = "/{id}", method = RequestMethod.GET)
   public User read(@PathVariable(name = "id", required = true) Integer id) {
     return repository.findById(id).orElse(null);

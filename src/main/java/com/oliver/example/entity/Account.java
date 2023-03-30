@@ -29,7 +29,7 @@ public class Account {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @Fetch(FetchMode.JOIN)
-  @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "account_id"))
+  @CollectionTable(name = "account_role", joinColumns = @JoinColumn(name = "account_id"))
   @Column(name = "role")
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private Set<String> roles;
