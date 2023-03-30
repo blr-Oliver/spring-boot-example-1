@@ -43,7 +43,7 @@ public class SecurityConfig {
     config
         .antMatchers("/swagger-ui/**", "/*/api-docs/**").permitAll()
         .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-        .antMatchers("/api/users/**").hasRole("ADMIN")
+        .antMatchers("/api/users/**", "/api/accounts/**").hasRole("ADMIN")
         .antMatchers("/api/**").authenticated()
         .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
         .anyRequest().authenticated();

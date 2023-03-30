@@ -58,7 +58,7 @@ public class TrackController {
     return repository.save(entity);
   }
 
-  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
   public void delete(@PathVariable(name = "id", required = true) Integer id) {
     repository.deleteById(id);
   }
