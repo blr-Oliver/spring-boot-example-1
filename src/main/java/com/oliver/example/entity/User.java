@@ -12,11 +12,11 @@ public class User {
   @Column(name = "account_id", nullable = false)
   private Integer accountId;
 
-  @OneToOne(fetch = FetchType.LAZY, optional = false, orphanRemoval = false)
-  @JoinColumn(name = "account_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @OneToOne(fetch = FetchType.LAZY, optional = true, orphanRemoval = false, mappedBy = "user")
+  @PrimaryKeyJoinColumn
   private Account account;
 
-  @Column(name = "public_name", unique = true, nullable = false)
+  @Column(name = "public_name")
   private String publicName;
 
   @ManyToMany(cascade = {

@@ -20,7 +20,8 @@ public class RepositoryUserDetailsService implements UserDetailsService {
         .map(account -> User.builder()
             .username(account.getEmail())
             .password(account.getPassword())
-            .roles(account.getRoles().toArray(new String[0]))
+            .roles(account.getRoles() == null ? new String[0] : account.getRoles().toArray(new String[0]))
+            .accountLocked(account.isLocked())
             .build())
         .orElseThrow(() -> new UsernameNotFoundException(username));
   }

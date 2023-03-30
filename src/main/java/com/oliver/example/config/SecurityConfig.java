@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -24,6 +26,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
+  @Bean
+  public AuthenticationManager globalAuthenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
+  }
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
@@ -46,6 +52,7 @@ public class SecurityConfig {
         .antMatchers("/api/users/**", "/api/accounts/**").hasRole("ADMIN")
         .antMatchers("/api/**").authenticated()
         .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll()
+        .antMatchers(HttpMethod.POST, "/register").anonymous()
         .anyRequest().authenticated();
   }
 
